@@ -32,8 +32,8 @@ resource "azurerm_sql_server" "main" {
   resource_group_name          = azurerm_resource_group.main.name
   location                     = azurerm_resource_group.main.location
   version                      = "12.0"
-  administrator_login          = var.sql_admin_username
-  administrator_login_password = var.sql_admin_password
+  administrator_login          = var.AZURE_SQL_ADMIN
+  administrator_login_password = var.AZURE_SQL_PASSWORD
 }
 
 resource "azurerm_sql_database" "main" {
@@ -67,6 +67,9 @@ resource "azurerm_function_app" "main" {
     PYTHON_VERSION           = "3.9"     # Specify Python version (e.g., 3.8, 3.9)
     AzureWebJobsStorage      = azurerm_storage_account.main.primary_blob_connection_string
     SqlDatabaseConnection    = azurerm_sql_database.main.id
-    YoutubeApiKey            = var.youtube_api_key  # Use variable
+    RUNWAYML_API_KEY         = var.RUNWAYML_API_KEY
+    YOUTUBE_CLIENT_ID        = var.YOUTUBE_CLIENT_ID
+    YOUTUBE_CLIENT_SECRET    = var.YOUTUBE_CLIENT_SECRET
+    YOUTUBE_REFRESH_TOKEN    = var.YOUTUBE_REFRESH_TOKEN
   }
 }

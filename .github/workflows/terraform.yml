@@ -28,9 +28,13 @@ jobs:
 
       - name: Plan Terraform
         run: terraform plan -out=plan.out \
-            -var="sql_admin_username=${{ secrets.AZURE_SQL_ADMIN }}" \
-            -var="sql_admin_password=${{ secrets.AZURE_SQL_PASSWORD }}"\
-            -var="youtube_api_key=${{ secrets.AZURE_YOUTUBE_API_KEY }}"
+            -var="AZURE_SQL_ADMIN=${{ secrets.AZURE_SQL_ADMIN }}" \
+            -var="AZURE_SQL_PASSWORD=${{ secrets.AZURE_SQL_PASSWORD }}"\
+            -var="RUNWAYML_API_KEY=${{ secrets.RUNWAYML_API_KEY }}"\
+            -var="YOUTUBE_CLIENT_ID=${{ secrets.YOUTUBE_CLIENT_ID }}"\
+            -var="YOUTUBE_CLIENT_SECRET=${{ secrets.YOUTUBE_CLIENT_SECRET }}"\
+            -var="YOUTUBE_REFRESH_TOKEN=${{ secrets.YOUTUBE_REFRESH_TOKEN }}"
+            
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
@@ -46,9 +50,12 @@ jobs:
       - name: Apply Terraform
         if: github.event_name == 'workflow_dispatch'
         run: terraform apply -auto-approve plan.out \
-            -var="sql_admin_username=${{ secrets.AZURE_SQL_ADMIN }}" \
-            -var="sql_admin_password=${{ secrets.AZURE_SQL_PASSWORD }}"\
-            -var="youtube_api_key=${{ secrets.AZURE_YOUTUBE_API_KEY }}"
+            -var="AZURE_SQL_ADMIN=${{ secrets.AZURE_SQL_ADMIN }}" \
+            -var="AZURE_SQL_PASSWORD=${{ secrets.AZURE_SQL_PASSWORD }}"\
+            -var="RUNWAYML_API_KEY=${{ secrets.RUNWAYML_API_KEY }}"\
+            -var="YOUTUBE_CLIENT_ID=${{ secrets.YOUTUBE_CLIENT_ID }}"\
+            -var="YOUTUBE_CLIENT_SECRET=${{ secrets.YOUTUBE_CLIENT_SECRET }}"\
+            -var="YOUTUBE_REFRESH_TOKEN=${{ secrets.YOUTUBE_REFRESH_TOKEN }}"
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
