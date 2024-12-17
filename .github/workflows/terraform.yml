@@ -8,6 +8,7 @@ on:
       - '.github/workflows/terraform.yml'
     branches:
       - main
+  workflow_dispatch:
 
 permissions:
   id-token: write    # Grant OIDC permissions for Azure Login
