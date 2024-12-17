@@ -7,5 +7,5 @@ output "sql_server_name" {
 }
 
 output "function_app_name" {
-  value = azurerm_function_app.main.name
+  value = azurerm_linux_function_app.main.name  # Updated to match the correct resource
 }
