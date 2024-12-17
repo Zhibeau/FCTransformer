@@ -5,6 +5,7 @@ provider "azurerm" {
   client_id       = var.AZURE_CLIENT_ID
   client_secret   = var.AZURE_CLIENT_SECRET
   tenant_id       = var.ARM_TENANT_ID
+  resource_provider_registrations = "none"
 }
 
 
