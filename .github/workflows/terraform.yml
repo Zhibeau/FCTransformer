@@ -27,7 +27,8 @@ jobs:
         run: terraform init
 
       - name: Plan Terraform
-        run: terraform plan -out=plan.out \
+        run: |
+          terraform plan -out=plan.out 
             -var="AZURE_SQL_ADMIN=${{ secrets.AZURE_SQL_ADMIN }}" \
             -var="AZURE_SQL_PASSWORD=${{ secrets.AZURE_SQL_PASSWORD }}"\
             -var="RUNWAYML_API_KEY=${{ secrets.RUNWAYML_API_KEY }}"\
@@ -49,7 +50,8 @@ jobs:
 
       - name: Apply Terraform
         if: github.event_name == 'workflow_dispatch'
-        run: terraform apply -auto-approve plan.out \
+        run: |
+          terraform apply -auto-approve plan.out \
             -var="AZURE_SQL_ADMIN=${{ secrets.AZURE_SQL_ADMIN }}" \
             -var="AZURE_SQL_PASSWORD=${{ secrets.AZURE_SQL_PASSWORD }}"\
             -var="RUNWAYML_API_KEY=${{ secrets.RUNWAYML_API_KEY }}"\
