@@ -66,7 +66,7 @@ resource "azurerm_service_plan" "main" {
   sku_name = "Y1"             # Required: Pricing tier (e.g., Y1 for consumption plan)
 }
 
-resource "azurerm_function_app" "main" {
+resource "azurerm_linux_function_app" "main" {
   name                       = "fc-transformer-function"
   resource_group_name        = azurerm_resource_group.main.name
   location                   = azurerm_resource_group.main.location
