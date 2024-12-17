@@ -27,7 +27,7 @@ resource "azurerm_storage_container" "audios" {
   container_access_type = "private"
 }
 
-resource "azurerm_sql_server" "main" {
+resource "azurerm_postgresql_server" "main" {
   name                         = "fctransformer-sql-server"
   resource_group_name          = azurerm_resource_group.main.name
   location                     = azurerm_resource_group.main.location
@@ -36,11 +36,11 @@ resource "azurerm_sql_server" "main" {
   administrator_login_password = var.AZURE_SQL_PASSWORD
 }
 
-resource "azurerm_sql_database" "main" {
+resource "azurerm_postgresql_database" "main" {
   name                = "fctransformer-prompt-db"
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
-  server_name         = azurerm_sql_server.main.name
+  server_name         = azurerm_postgresql_server.main.name
   sku_name            = "Basic"
 }
 
@@ -66,7 +66,7 @@ resource "azurerm_function_app" "main" {
     FUNCTIONS_WORKER_RUNTIME = "python"  # Change to Python runtime
     PYTHON_VERSION           = "3.9"     # Specify Python version (e.g., 3.8, 3.9)
     AzureWebJobsStorage      = azurerm_storage_account.main.primary_blob_connection_string
-    SqlDatabaseConnection    = azurerm_sql_database.main.id
+    SqlDatabaseConnection    = azurerm_postgresql_database.main.id
     RUNWAYML_API_KEY         = var.RUNWAYML_API_KEY
     YOUTUBE_CLIENT_ID        = var.YOUTUBE_CLIENT_ID
     YOUTUBE_CLIENT_SECRET    = var.YOUTUBE_CLIENT_SECRET
