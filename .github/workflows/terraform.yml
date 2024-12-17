@@ -45,11 +45,10 @@ jobs:
           ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
 
       - name: Save Terraform Plan
-        working-directory: ./terraform
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3  # Missing "uses" keyword added here
         with:
           name: terraform-plan
-          path: plan.out
+          path: ./terraform/plan.out      # Ensure the correct path for the saved artifact
 
       - name: Apply Terraform
         working-directory: ./terraform
