@@ -24,11 +24,13 @@ jobs:
           terraform_version: 1.5.7
 
       - name: Initialize Terraform
+        working-directory: ./terraform
         run: terraform init
 
       - name: Plan Terraform
+        working-directory: ./terraform
         run: |
-          terraform plan -out=plan.out 
+          terraform plan -out=plan.out \
             -var="AZURE_SQL_ADMIN=${{ secrets.AZURE_SQL_ADMIN }}" \
             -var="AZURE_SQL_PASSWORD=${{ secrets.AZURE_SQL_PASSWORD }}"\
             -var="RUNWAYML_API_KEY=${{ secrets.RUNWAYML_API_KEY }}"\
@@ -43,12 +45,14 @@ jobs:
           ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
 
       - name: Save Terraform Plan
+        working-directory: ./terraform
         uses: actions/upload-artifact@v3
         with:
           name: terraform-plan
           path: plan.out
 
       - name: Apply Terraform
+        working-directory: ./terraform
         if: github.event_name == 'workflow_dispatch'
         run: |
           terraform apply -auto-approve plan.out \
