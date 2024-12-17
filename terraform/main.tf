@@ -28,12 +28,24 @@ resource "azurerm_storage_container" "audios" {
 }
 
 resource "azurerm_postgresql_server" "main" {
-  name                         = "fctransformer-sql-server"
-  resource_group_name          = azurerm_resource_group.main.name
-  location                     = azurerm_resource_group.main.location
-  version                      = "12.0"
+  name                = "fctransformer-postgres-server"  # Replace with your server name
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
   administrator_login          = var.AZURE_SQL_ADMIN
   administrator_login_password = var.AZURE_SQL_PASSWORD
+  version             = "12"                            # PostgreSQL version
+
+  # Required arguments
+  sku_name                = "B_Gen5_1"                  # Pricing tier
+  ssl_enforcement_enabled = true                       # Enforce SSL
+
+  storage_mb       = 32                              # Storage in MB (e.g., 32MB)
+  backup_retention_days = 7                            # Retention period for backups
+  geo_redundant_backup_enabled = false                 # Geo-redundancy
+
+  tags = {
+    environment = "production"
+  }
 }
 
 resource "azurerm_postgresql_database" "main" {
@@ -44,7 +56,7 @@ resource "azurerm_postgresql_database" "main" {
   sku_name            = "Basic"
 }
 
-resource "azurerm_app_service_plan" "main" {
+resource "azurerm_service_plan" "main" {
   name                = "fc-transformer-plan"
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
