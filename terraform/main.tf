@@ -33,13 +33,13 @@ resource "azurerm_postgresql_server" "main" {
   resource_group_name = azurerm_resource_group.main.name
   administrator_login          = var.AZURE_SQL_ADMIN
   administrator_login_password = var.AZURE_SQL_PASSWORD
-  version             = "12"                            # PostgreSQL version
+  version             = "11"                            # PostgreSQL version
 
   # Required arguments
   sku_name                = "B_Gen5_1"                  # Pricing tier
   ssl_enforcement_enabled = true                       # Enforce SSL
 
-  storage_mb       = 32                              # Storage in MB (e.g., 32MB)
+  storage_mb       = 5120                              # Storage in MB (e.g., 5GB)
   backup_retention_days = 7                            # Retention period for backups
   geo_redundant_backup_enabled = false                 # Geo-redundancy
 
@@ -60,10 +60,9 @@ resource "azurerm_service_plan" "main" {
   name                = "fc-transformer-plan"
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
-  sku {
-    tier = "Dynamic"
-    size = "Y1"
-  }
+  
+  os_type  = "Linux"          # Required: Specify "Linux" or "Windows" based on your app
+  sku_name = "Y1"             # Required: Pricing tier (e.g., Y1 for consumption plan)
 }
 
 resource "azurerm_function_app" "main" {
