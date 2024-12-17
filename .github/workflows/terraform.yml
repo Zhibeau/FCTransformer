@@ -46,7 +46,11 @@ jobs:
             -var="RUNWAYML_API_KEY=${{ secrets.RUNWAYML_API_KEY }}"\
             -var="YOUTUBE_CLIENT_ID=${{ secrets.YOUTUBE_CLIENT_ID }}"\
             -var="YOUTUBE_CLIENT_SECRET=${{ secrets.YOUTUBE_CLIENT_SECRET }}"\
-            -var="YOUTUBE_REFRESH_TOKEN=${{ secrets.YOUTUBE_REFRESH_TOKEN }}"
+            -var="YOUTUBE_REFRESH_TOKEN=${{ secrets.YOUTUBE_REFRESH_TOKEN }}"\
+            -var="AZURE_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID }}"\
+            -var="ARM_TENANT_ID=${{ secrets.ARM_TENANT_ID }}"\
+            -var="AZURE_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}"\
+            -var="AZURE_CLIENT_SECRET=${{ secrets.AZURE_CLIENT_SECRET }}"
             
       - name: Save Terraform Plan
         uses: actions/upload-artifact@v3  # Missing "uses" keyword added here
@@ -64,9 +68,8 @@ jobs:
             -var="RUNWAYML_API_KEY=${{ secrets.RUNWAYML_API_KEY }}"\
             -var="YOUTUBE_CLIENT_ID=${{ secrets.YOUTUBE_CLIENT_ID }}"\
             -var="YOUTUBE_CLIENT_SECRET=${{ secrets.YOUTUBE_CLIENT_SECRET }}"\
-            -var="YOUTUBE_REFRESH_TOKEN=${{ secrets.YOUTUBE_REFRESH_TOKEN }}"
-        env:
-          ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-          ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+            -var="YOUTUBE_REFRESH_TOKEN=${{ secrets.YOUTUBE_REFRESH_TOKEN }}"\
+            -var="AZURE_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID }}"\
+            -var="ARM_TENANT_ID=${{ secrets.ARM_TENANT_ID }}"\
+            -var="AZURE_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}"\
+            -var="AZURE_CLIENT_SECRET=${{ secrets.AZURE_CLIENT_SECRET }}"

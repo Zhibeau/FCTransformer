@@ -1,6 +1,12 @@
 provider "azurerm" {
   features {}
+
+  subscription_id = var.AZURE_SUBSCRIPTION_ID
+  client_id       = var.AZURE_CLIENT_ID
+  client_secret   = var.AZURE_CLIENT_SECRET
+  tenant_id       = var.ARM_TENANT_ID
 }
+
 
 resource "azurerm_resource_group" "main" {
   name     = "fc-transformer-rg"
