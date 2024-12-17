@@ -9,6 +9,9 @@ on:
     branches:
       - main
 
+permissions:
+  id-token: write    # Grant OIDC permissions for Azure Login
+  contents: read     # Grant access to repository content
 
 jobs:
   terraform:
