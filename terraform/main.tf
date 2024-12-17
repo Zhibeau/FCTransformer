@@ -24,13 +24,13 @@ resource "azurerm_storage_account" "main" {
 
 resource "azurerm_storage_container" "videos" {
   name                  = "videos"
-  storage_account_name  = azurerm_storage_account.main.name
+  storage_account_id    = azurerm_storage_account.main.id
   container_access_type = "private"
 }
 
 resource "azurerm_storage_container" "audios" {
   name                  = "audios"
-  storage_account_name  = azurerm_storage_account.main.name
+  storage_account_id    = azurerm_storage_account.main.id
   container_access_type = "private"
 }
 
@@ -65,12 +65,12 @@ resource "azurerm_postgresql_database" "main" {
 }
 
 resource "azurerm_service_plan" "main" {
-  name                = "fc-transformer-plan"
+  name                = "fc-transformer-flex-plan"
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
-  
-  os_type  = "Linux"          # Required: Specify "Linux" or "Windows" based on your app
-  sku_name = "Y1"             # Required: Pricing tier (e.g., Y1 for consumption plan)
+  os_type             = "Linux"
+  sku_name            = "EP1"  # Elastic Premium (EP1, EP2, EP3)
+  worker_count        = 1      # Minimum 1 instance (auto-scales as needed)
 }
 
 resource "azurerm_linux_function_app" "main" {
@@ -83,8 +83,9 @@ resource "azurerm_linux_function_app" "main" {
 
   site_config {
     application_stack {
-      python_version = "3.9"  # Specify the Python runtime version
+      python_version = "3.11"  # Specify the Python runtime version
     }
+    elastic_instance_minimum = 1  # Minimum instances (scales automatically)    
   }
 
   app_settings = {
