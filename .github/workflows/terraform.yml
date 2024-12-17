@@ -62,15 +62,4 @@ jobs:
       - name: Apply Terraform
         working-directory: ./terraform
         if: github.event_name == 'workflow_dispatch'
-        run: |
-          terraform apply -auto-approve plan.out \
-            -var="AZURE_SQL_ADMIN=${{ secrets.AZURE_SQL_ADMIN }}" \
-            -var="AZURE_SQL_PASSWORD=${{ secrets.AZURE_SQL_PASSWORD }}"\
-            -var="RUNWAYML_API_KEY=${{ secrets.RUNWAYML_API_KEY }}"\
-            -var="YOUTUBE_CLIENT_ID=${{ secrets.YOUTUBE_CLIENT_ID }}"\
-            -var="YOUTUBE_CLIENT_SECRET=${{ secrets.YOUTUBE_CLIENT_SECRET }}"\
-            -var="YOUTUBE_REFRESH_TOKEN=${{ secrets.YOUTUBE_REFRESH_TOKEN }}"\
-            -var="AZURE_CLIENT_ID=${{ secrets.AZURE_CLIENT_ID }}"\
-            -var="ARM_TENANT_ID=${{ secrets.ARM_TENANT_ID }}"\
-            -var="AZURE_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}"\
-            -var="AZURE_CLIENT_SECRET=${{ secrets.AZURE_CLIENT_SECRET }}"
+        run: terraform apply -auto-approve plan.out
