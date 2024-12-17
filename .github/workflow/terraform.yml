@@ -6,6 +6,8 @@ on:
       - '**/*.tf'
       - '**/*.tfvars'
       - '.github/workflows/terraform.yml'
+    branches:
+      - main
 
 
 jobs:
