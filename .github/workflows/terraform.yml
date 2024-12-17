@@ -46,18 +46,33 @@ jobs:
           # Fetch all resources in the resource group
           RESOURCES=$(az resource list --resource-group fc-transformer-rg --query "[].{id:id, type:type}" -o json)
 
-          # Loop through each resource and import it into Terraform state
+          # Map Azure resource types to valid Terraform types
           echo "$RESOURCES" | jq -c '.[]' | while read resource; do
             RESOURCE_ID=$(echo "$resource" | jq -r '.id')
             RESOURCE_TYPE=$(echo "$resource" | jq -r '.type')
 
-            # Transform Azure resource type to Terraform resource type
-            TERRAFORM_TYPE=$(echo "$RESOURCE_TYPE" | tr '/' '_' | awk '{print tolower($0)}')
+            case "$RESOURCE_TYPE" in
+              "Microsoft.Storage/storageAccounts")
+                TERRAFORM_TYPE="azurerm_storage_account"
+                ;;
+              "Microsoft.DBforPostgreSQL/servers")
+                TERRAFORM_TYPE="azurerm_postgresql_server"
+                ;;
+              "Microsoft.Web/serverfarms")
+                TERRAFORM_TYPE="azurerm_service_plan"
+                ;;
+              "Microsoft.Web/sites")
+                TERRAFORM_TYPE="azurerm_linux_function_app"
+                ;;
+              *)
+                echo "Skipping unsupported resource type: $RESOURCE_TYPE"
+                continue
+                ;;
+            esac
 
+            # Construct Terraform import command
             echo "Importing resource: $RESOURCE_ID (type: $TERRAFORM_TYPE)"
-
-            # Import resource dynamically
-            terraform import "azurerm_${TERRAFORM_TYPE}.main" "$RESOURCE_ID" || echo "Failed to import $RESOURCE_ID"
+            terraform import "${TERRAFORM_TYPE}.main" "$RESOURCE_ID" || echo "Failed to import $RESOURCE_ID"
           done
 
       - name: Plan Terraform

@@ -8,7 +8,6 @@ provider "azurerm" {
   resource_provider_registrations = "none"
 }
 
-
 resource "azurerm_resource_group" "main" {
   name     = "fc-transformer-rg"
   location = "East US"
