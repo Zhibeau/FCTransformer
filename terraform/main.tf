@@ -67,21 +67,27 @@ resource "azurerm_service_plan" "main" {
 }
 
 resource "azurerm_linux_function_app" "main" {
-  name                       = "fc-transformer-function"
-  resource_group_name        = azurerm_resource_group.main.name
-  location                   = azurerm_resource_group.main.location
-  app_service_plan_id        = azurerm_service_plan.main.id
+  name                = "fc-transformer-function"
+  resource_group_name = azurerm_resource_group.main.name
+  location            = azurerm_resource_group.main.location
+  service_plan_id     = azurerm_service_plan.main.id
   storage_account_name       = azurerm_storage_account.main.name
   storage_account_access_key = azurerm_storage_account.main.primary_access_key
 
+  site_config {
+    application_stack {
+      python_version = "3.9"  # Specify the Python runtime version
+    }
+  }
+
   app_settings = {
-    FUNCTIONS_WORKER_RUNTIME = "python"  # Change to Python runtime
-    PYTHON_VERSION           = "3.9"     # Specify Python version (e.g., 3.8, 3.9)
+    FUNCTIONS_WORKER_RUNTIME = "python"  # Runtime type: Python
     AzureWebJobsStorage      = azurerm_storage_account.main.primary_blob_connection_string
-    SqlDatabaseConnection    = azurerm_postgresql_database.main.id
+    SqlDatabaseConnection    = azurerm_postgresql_server.main.fqdn
     RUNWAYML_API_KEY         = var.RUNWAYML_API_KEY
     YOUTUBE_CLIENT_ID        = var.YOUTUBE_CLIENT_ID
     YOUTUBE_CLIENT_SECRET    = var.YOUTUBE_CLIENT_SECRET
     YOUTUBE_REFRESH_TOKEN    = var.YOUTUBE_REFRESH_TOKEN
   }
 }
+
