@@ -51,9 +51,10 @@ resource "azurerm_postgresql_server" "main" {
 resource "azurerm_postgresql_database" "main" {
   name                = "fctransformer-prompt-db"
   resource_group_name = azurerm_resource_group.main.name
-  location            = azurerm_resource_group.main.location
   server_name         = azurerm_postgresql_server.main.name
-  sku_name            = "Basic"
+
+  charset   = "UTF8"          # Required: Character set for the database
+  collation = "English_United States.1252"  # Required: Collation for the database
 }
 
 resource "azurerm_service_plan" "main" {
