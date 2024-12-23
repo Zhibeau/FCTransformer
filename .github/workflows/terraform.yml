@@ -55,9 +55,6 @@ jobs:
               "Microsoft.Storage/storageAccounts")
                 TERRAFORM_TYPE="azurerm_storage_account"
                 ;;
-              "Microsoft.DBforPostgreSQL/servers")
-                TERRAFORM_TYPE="azurerm_postgresql_server"
-                ;;
               "Microsoft.Web/serverfarms")
                 TERRAFORM_TYPE="azurerm_service_plan"
                 ;;
@@ -79,8 +76,6 @@ jobs:
         working-directory: ./terraform
         run: |
           terraform plan -out=plan.out \
-            -var="AZURE_SQL_ADMIN=${{ secrets.AZURE_SQL_ADMIN }}" \
-            -var="AZURE_SQL_PASSWORD=${{ secrets.AZURE_SQL_PASSWORD }}"\
             -var="RUNWAYML_API_KEY=${{ secrets.RUNWAYML_API_KEY }}"\
             -var="YOUTUBE_CLIENT_ID=${{ secrets.YOUTUBE_CLIENT_ID }}"\
             -var="YOUTUBE_CLIENT_SECRET=${{ secrets.YOUTUBE_CLIENT_SECRET }}"\

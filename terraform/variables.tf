@@ -30,17 +30,6 @@ variable "AZURE_CLIENT_SECRET" {
   sensitive   = true
 }
 
-variable "AZURE_SQL_ADMIN" {
-  description = "The SQL Server admin username"
-  type        = string
-}
-
-variable "AZURE_SQL_PASSWORD" {
-  description = "The SQL Server admin password"
-  type        = string
-  sensitive   = true
-}
-
 variable "RUNWAYML_API_KEY" {
   description = "RunawayML API key for video generation"
   type        = string
