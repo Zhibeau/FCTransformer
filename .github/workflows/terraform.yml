@@ -83,7 +83,11 @@ jobs:
             echo "Importing resource: $RESOURCE_ID (type: $TERRAFORM_TYPE)"
             terraform import "${TERRAFORM_TYPE}.main" "$RESOURCE_ID" || echo "Failed to import $RESOURCE_ID"
           done
-          
+
+      - name: Refresh Terraform State
+        working-directory: ./terraform
+        run: terraform refresh
+
       - name: Plan Terraform
         working-directory: ./terraform
         run: |
