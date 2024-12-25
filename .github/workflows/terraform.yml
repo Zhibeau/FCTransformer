@@ -38,7 +38,17 @@ jobs:
         working-directory: ./terraform
         run: terraform init
 
+      - name: Check Resource Group Existence
+        id: check_rg
+        run: |
+          if az group exists --name fc-transformer-rg; then
+            echo "resource_group_exists=true" >> $GITHUB_ENV
+          else
+            echo "resource_group_exists=false" >> $GITHUB_ENV
+          fi
+
       - name: Import Existing Azure Resources
+        if: env.resource_group_exists == 'true'
         working-directory: ./terraform
         run: |
           echo "Fetching resources in resource group: fc-transformer-rg"
@@ -71,7 +81,7 @@ jobs:
             echo "Importing resource: $RESOURCE_ID (type: $TERRAFORM_TYPE)"
             terraform import "${TERRAFORM_TYPE}.main" "$RESOURCE_ID" || echo "Failed to import $RESOURCE_ID"
           done
-
+          
       - name: Plan Terraform
         working-directory: ./terraform
         run: |
@@ -84,12 +94,12 @@ jobs:
             -var="ARM_TENANT_ID=${{ secrets.ARM_TENANT_ID }}"\
             -var="AZURE_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}"\
             -var="AZURE_CLIENT_SECRET=${{ secrets.AZURE_CLIENT_SECRET }}"
-            
+
       - name: Save Terraform Plan
-        uses: actions/upload-artifact@v3  # Missing "uses" keyword added here
+        uses: actions/upload-artifact@v3
         with:
           name: terraform-plan
-          path: ./terraform/plan.out      # Ensure the correct path for the saved artifact
+          path: ./terraform/plan.out
 
       - name: Apply Terraform
         working-directory: ./terraform
