@@ -10,7 +10,7 @@ provider "azurerm" {
 
 resource "azurerm_resource_group" "main" {
   name     = "fc-transformer-rg"
-  location = "East US"
+  location = "Canada East"
 }
 
 resource "azurerm_storage_account" "main" {
