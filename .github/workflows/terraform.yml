@@ -47,45 +47,6 @@ jobs:
             echo "resource_group_exists=false" >> $GITHUB_ENV
           fi
 
-      - name: Import Existing Azure Resources
-        if: env.resource_group_exists == 'true'
-        working-directory: ./terraform
-        run: |
-          echo "Fetching resources in resource group: fc-transformer-rg"
-          
-          # Fetch all resources in the resource group
-          RESOURCES=$(az resource list --resource-group fc-transformer-rg --query "[].{id:id, type:type}" -o json)
-
-          # Map Azure resource types to valid Terraform types
-          echo "$RESOURCES" | jq -c '.[]' | while read resource; do
-            RESOURCE_ID=$(echo "$resource" | jq -r '.id')
-            RESOURCE_TYPE=$(echo "$resource" | jq -r '.type')
-
-            case "$RESOURCE_TYPE" in
-              "Microsoft.Storage/storageAccounts")
-                TERRAFORM_TYPE="azurerm_storage_account"
-                ;;
-              "Microsoft.Web/serverfarms")
-                TERRAFORM_TYPE="azurerm_service_plan"
-                ;;
-              "Microsoft.Web/sites")
-                TERRAFORM_TYPE="azurerm_linux_function_app"
-                ;;
-              *)
-                echo "Skipping unsupported resource type: $RESOURCE_TYPE"
-                continue
-                ;;
-            esac
-
-            # Construct Terraform import command
-            echo "Importing resource: $RESOURCE_ID (type: $TERRAFORM_TYPE)"
-            terraform import "${TERRAFORM_TYPE}.main" "$RESOURCE_ID" || echo "Failed to import $RESOURCE_ID"
-          done
-
-      - name: Refresh Terraform State
-        working-directory: ./terraform
-        run: terraform refresh
-
       - name: Plan Terraform
         working-directory: ./terraform
         run: |
