@@ -19,18 +19,22 @@ resource "azurerm_storage_account" "main" {
   location                 = azurerm_resource_group.main.location
   account_tier             = "Standard"
   account_replication_type = "LRS"
+
+  depends_on = [azurerm_resource_group.main]
 }
 
 resource "azurerm_storage_container" "videos" {
   name                  = "videos"
   storage_account_id    = azurerm_storage_account.main.id
   container_access_type = "private"
+  depends_on = [azurerm_storage_account.main]
 }
 
 resource "azurerm_storage_container" "audios" {
   name                  = "audios"
   storage_account_id    = azurerm_storage_account.main.id
   container_access_type = "private"
+  depends_on = [azurerm_storage_account.main]
 }
 
 
@@ -39,8 +43,7 @@ resource "azurerm_service_plan" "main" {
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
   os_type             = "Linux"
-  sku_name            = "EP1"  # Elastic Premium (EP1, EP2, EP3)
-  worker_count        = 1      # Minimum 1 instance (auto-scales as needed)
+  sku_name            = "Y1"
 }
 
 resource "azurerm_linux_function_app" "main" {
@@ -50,12 +53,12 @@ resource "azurerm_linux_function_app" "main" {
   service_plan_id     = azurerm_service_plan.main.id
   storage_account_name       = azurerm_storage_account.main.name
   storage_account_access_key = azurerm_storage_account.main.primary_access_key
+  depends_on = [azurerm_service_plan.main]
 
   site_config {
     application_stack {
       python_version = "3.11"  # Specify the Python runtime version
     }
-    elastic_instance_minimum = 1  # Minimum instances (scales automatically)    
   }
 
   app_settings = {
