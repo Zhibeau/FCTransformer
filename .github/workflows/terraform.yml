@@ -42,15 +42,13 @@ jobs:
         id: check_rg
         run: |
           if az group exists --name fc-transformer-rg; then
-            echo "resource_group_exists=true"
+            echo "resource_group_exists=true" >> $GITHUB_ENV
           else
-            echo "resource_group_exists=false"
+            echo "resource_group_exists=false" >> $GITHUB_ENV
           fi
-        shell: bash
-        continue-on-error: true
 
       - name: Import Existing Azure Resources
-        if: steps.check_rg.outputs.resource_group_exists == 'true'
+        if: env.resource_group_exists == 'true'
         working-directory: ./terraform
         run: |
           echo "Fetching resources in resource group: fc-transformer-rg"
