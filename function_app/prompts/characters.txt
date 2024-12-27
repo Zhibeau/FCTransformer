@@ -1,0 +1,11 @@
+ninja
+transformer
+knight
+cat
+millionaire
+monsters
+Deadpool
+spiderman
+santa clause
+wizard
+dragon

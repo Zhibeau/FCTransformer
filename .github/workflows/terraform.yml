@@ -1,13 +1,6 @@
 name: Terraform Deploy
 
 on:
-  push:
-    paths:
-      - '**/*.tf'
-      - '**/*.tfvars'
-      - '.github/workflows/terraform.yml'
-    branches:
-      - main
   workflow_dispatch:
 
 permissions:
